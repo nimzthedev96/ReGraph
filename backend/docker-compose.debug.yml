@@ -1,0 +1,11 @@
+services:
+  datatracker:
+    image: datatracker
+    build:
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: dev
+    ports:
+      - 3002:3002
+      - 9229:9229
+    command: ["node", "--inspect=0.0.0.0:9229", "app.js"]

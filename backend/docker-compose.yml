@@ -1,0 +1,9 @@
+services:
+  datatracker:
+    image: datatracker
+    build:
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3002:3002 

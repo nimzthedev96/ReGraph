@@ -1,50 +1,82 @@
 const HttpError = require("../models/httpError");
 const DataPoint = require("../models/dataPoint");
 
-const createSingleDataPoint = async (req, res, next) => {
+const csvToJsonReader = require("csvtojson");
+
+const readDataPointsFromFile = async (req, res, next) => {
   /* Create single data point API */
-  const { data, category } = req.body;
+  //const { filename, category } = req.body;
+  const filename = "D:/user_files/test1.csv";
+  const category = "test";
+  let userKey = "3c32d290-34d7-4df2-9e95-ee9c8ccdfaae"; //req.userData.userKey;
 
-  let integrationKey = req.userData.integrationKey;
-
-  if (integrationKey == "Error") {
+  /*if (userKey == "Error") {
     return res.status(500).json({
       error: "Error with credentials, please contact support",
     });
-  }
+  }*/
+
+  const dataFromCsv = await csvToJsonReader().fromFile(filename);
+  let dataPointsToSave = [];
+  console.log(dataFromCsv);
+
+  /* Lets now transfrom our array into an array of documents that we can
+     bulk insert into mongo */
+
+  /*dataFromCsv.forEach((element, index) => {
+    let dp = {
+      userKey: userKey,
+      category: category,
+      data: element,
+      createdDate: new Date().toDateString(),
+      source: "test",
+    };
+    dataPointsToSave.push(dp);
+  });*/
+
+  console.log(dataPointsToSave);
+
+  /*DataPoint.insertMany(dataPointsToSave, { ordered: false }).then((res) => {
+    console.log("Number of records inserted: " + res.insertedCount);
+  });*/
 
   /* If all is well, then go ahead and create */
-  let newDp = new DataPoint({
-    integrationKey,
-    category,
-    data,
-    createdDate: new Date().toDateString(),
-    source: "test",
-  });
-
   try {
-    await newDp.save();
+    dataFromCsv.forEach(async (element) => {
+      let newDp = new DataPoint({
+        userKey,
+        category,
+        data: element,
+        createdDate: new Date().toDateString(),
+        source: "test",
+      });
+
+      await newDp.save();
+    });
   } catch (e) {
     console.log("Error saving single data point: " + e);
     return res.status(500).json({
-      error: "Error saving single data point, please contact support",
+      error: "Error saving data points, please contact support",
     });
   }
 
   return res.status(200).json({
-    success: "Create single data point successful",
+    success: "All data points read from file and saved!",
   });
 };
 
 const getDataPointFields = async (req, res, next) => {
   /* The idea of this function is to get the different fields / properties
-     we have available to report on for this integrationKey and category 
+     we have available to report on for this userKey and category 
      Making life easier for the front end - hopefully :) */
-  const { category } = req.body;
+  console.log(req);
+  console.log(req.body);
+  const { category } = "test"; //req.body;
   /* First do some validations */
-  let integrationKey = req.userData.integrationKey;
+  /* let userKey = req.userData.userKey;*/
+  let userKey = "3c32d290-34d7-4df2-9e95-ee9c8ccdfaae";
 
-  if (integrationKey == "Error") {
+  if (userKey == "Error") {
     return res.status(500).json({
       error: "Error finding user, please contact support",
     });
@@ -52,7 +84,7 @@ const getDataPointFields = async (req, res, next) => {
 
   let data = await DataPoint.find({
     category: category,
-    integrationKey: integrationKey,
+    userKey: userKey,
   });
 
   let keysArray = data.map((dp) => Object.keys(dp.data));
@@ -63,51 +95,12 @@ const getDataPointFields = async (req, res, next) => {
   });
 };
 
-const bulkCreateDataPoints = async (req, res, next) => {
-  /* Bulk create data points API  */
-  const { data, category } = req.body;
-
-  let integrationKey = req.userData.integrationKey;
-
-  if (integrationKey == "Error") {
-    return res.status(500).json({
-      error: "Error finding user, please contact support",
-    });
-  }
-
-  /* TO-DO: DO THIS WITH A BULK  UPDATE!! */
-
-  /* If all is well, then go ahead and create */
-  data.array.forEach(async (element) => {
-    let newDp = new DataPoint({
-      integrationKey,
-      category,
-      data: element,
-      createdDate: new Date().toDateString,
-      source: "test",
-    });
-
-    try {
-      await newDp.save();
-    } catch (e) {
-      console.log("Error bulk saving data points: " + e);
-      return res.status(500).json({
-        error: "Error saving datapoints, please contact support",
-      });
-    }
-  });
-
-  return res.status(200).json({
-    success: "Bulk create data points successful",
-  });
-};
-
 const fetchAllDataPoints = async (req, res, next) => {
   /* Fetch ALL data for this specific user account */
 
-  let integrationKey = req.userData.integrationKey;
+  let userKey = req.userData.userKey;
 
-  if (integrationKey == "Error") {
+  if (userKey == "Error") {
     return res.status(500).json({
       error: "Error finding user, please contact support",
     });
@@ -117,7 +110,7 @@ const fetchAllDataPoints = async (req, res, next) => {
 
   try {
     data = await DataPoint.find(
-      { integrationKey: integrationKey },
+      { userKey: userKey },
       { _id: 0, category: 1, data: 1, createdDate: 1, source: 1 } //only return the necessary info...
     );
   } catch (err) {
@@ -132,11 +125,12 @@ const fetchAllDataPoints = async (req, res, next) => {
 
 const fetchDataPointsByCategory = async (req, res, next) => {
   /* Fetch data for this specific user account and category */
-  const { category } = req.body;
+  //const { category } = req.body;
+  let category = "test";
+  let userKey = "3c32d290-34d7-4df2-9e95-ee9c8ccdfaae";
+  //req.userData.userKey;
 
-  let integrationKey = req.userData.integrationKey;
-
-  if (integrationKey == "Error") {
+  if (userKey == "Error") {
     return res.status(500).json({
       error: "Error finding user, please contact support",
     });
@@ -148,7 +142,7 @@ const fetchDataPointsByCategory = async (req, res, next) => {
     data = await DataPoint.find(
       {
         category: category,
-        integrationKey: integrationKey,
+        userKey: userKey,
       },
       { _id: 0, category: 1, data: 1, createdDate: 1, source: 1 } //only return the necessary info...
     );
@@ -176,9 +170,9 @@ const fetchDataWithFilters = async (req, res, next) => {
            integration keys   */
   const { category, filters, action } = req.body;
 
-  let integrationKey = req.userData.integrationKey;
+  let userKey = req.userData.userKey;
 
-  if (integrationKey == "Error") {
+  if (userKey == "Error") {
     return res.status(500).json({
       error: "Error finding user, please contact support",
     });
@@ -188,7 +182,7 @@ const fetchDataWithFilters = async (req, res, next) => {
 
   /* ALWAYS ADD THESE GUYS */
   Object.defineProperty(filters, "category", { value: category });
-  Object.defineProperty(filters, "integrationKey", { value: integrationKey });
+  Object.defineProperty(filters, "userKey", { value: userKey });
 
   switch (action) {
     case "DATA":
@@ -230,8 +224,7 @@ const fetchDataWithFilters = async (req, res, next) => {
 };
 
 module.exports.getDataPointFields = getDataPointFields;
-module.exports.createSingleDataPoint = createSingleDataPoint;
-module.exports.bulkCreateDataPoints = bulkCreateDataPoints;
+module.exports.readDataPointsFromFile = readDataPointsFromFile;
 module.exports.fetchAllDataPoints = fetchAllDataPoints;
 module.exports.fetchDataPointsByCategory = fetchDataPointsByCategory;
 module.exports.fetchDataWithFilters = fetchDataWithFilters;

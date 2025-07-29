@@ -1,0 +1,41 @@
+.App {
+  background-color: #c0b7c7;
+  text-align: left;
+}
+
+.bg-dark  {
+  background-color: #8a6c9f !important;
+  color: black;
+}
+
+.btnPrimary {
+  background-color: black;
+  border-color: black;
+  color: white;
+  border-radius: 10px;
+  padding: 5px 15px 5px 15px;
+}
+
+.btnPrimaryMenu {
+  background-color: transparent;
+  border: none;
+  color: black;
+  padding: 5px 15px 5px 15px;
+  text-align: center;
+  margin: 3px;
+}
+
+.btnPrimaryMenu:hover{
+  font-size: 18px;
+  background-color: transparent;
+  border: none;
+  color: black;
+  padding: 5px 15px 5px 15px;
+  text-align: center;
+  margin: 3px;
+}
+
+
+.home-container {
+  padding: 10px;
+}

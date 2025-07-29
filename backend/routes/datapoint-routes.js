@@ -9,18 +9,12 @@ const router = express.Router();
 router.use(authCheck);
 
 router.post(
-  "/addDataPoint",
-  [check("data").not().isEmpty(), check("category").not().isEmpty()],
-  datapointController.createSingleDataPoint
+  "/readDataPointsFromFile",
+  [check("filename").not().isEmpty(), check("category").not().isEmpty()],
+  datapointController.readDataPointsFromFile
 );
 
 router.post(
-  "/bulkAddDataPoints",
-  [check("data").not().isEmpty(), check("category").not().isEmpty()],
-  datapointController.bulkCreateDataPoints
-);
-
-router.get(
   "/getDataPointFields",
   [check("category").not().isEmpty()],
   datapointController.getDataPointFields
@@ -28,13 +22,13 @@ router.get(
 
 router.get("/fetchAllDataPoints", datapointController.fetchAllDataPoints);
 
-router.get(
+router.post(
   "/fetchDataPointsByCategory",
   [check("category").not().isEmpty()],
   datapointController.fetchDataPointsByCategory
 );
 
-router.get(
+router.post(
   "/fetchDataWithFilters",
   [
     check("category").not().isEmpty(),

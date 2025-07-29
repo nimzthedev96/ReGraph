@@ -1,7 +1,7 @@
 const User = require("../models/user");
 
 class UserHelperService {
-  static getIntegrationKey() {
+  static getuserKey() {
     let user;
 
     try {
@@ -10,7 +10,7 @@ class UserHelperService {
       return "Error";
     }
 
-    return user.integrationKey;
+    return user.userKey;
   }
 }
 

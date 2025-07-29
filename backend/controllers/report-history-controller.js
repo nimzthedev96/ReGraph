@@ -5,9 +5,9 @@ const Report = require("../models/report");
 const addReportHistory = async (req, res, next) => {
   const { reportKey } = req.body;
 
-  let integrationKey = req.userData.integrationKey;
+  let userKey = req.userData.userKey;
 
-  if (integrationKey == "Error") {
+  if (userKey == "Error") {
     return res.status(500).json({
       error: "Error finding user, please contact support",
     });
@@ -23,7 +23,7 @@ const addReportHistory = async (req, res, next) => {
 
   /* If all is well, then go ahead and create */
   let newReportHistory = new ReportHistory({
-    integrationKey,
+    userKey,
     reportKey,
     reportRunDate: new Date().toDateString(),
   });
@@ -44,9 +44,9 @@ const addReportHistory = async (req, res, next) => {
 
 const fetchAllReportHistory = async (req, res, next) => {
   /* Fetch all available reports for this user */
-  let integrationKey = req.userData.integrationKey;
+  let userKey = req.userData.userKey;
 
-  if (integrationKey == "Error") {
+  if (userKey == "Error") {
     return res.status(500).json({
       error: "Error finding user, please contact support",
     });
@@ -56,7 +56,7 @@ const fetchAllReportHistory = async (req, res, next) => {
 
   try {
     data = await ReportHistory.find(
-      { integrationKey: integrationKey },
+      { userKey: userKey },
       { _id: 0 } //remove ID's
     );
   } catch (err) {
@@ -75,9 +75,9 @@ const fetchReportHistory = async (req, res, next) => {
   /* Fetch all available reports for this user */
   const { reportKey } = req.body;
 
-  let integrationKey = req.userData.integrationKey;
+  let userKey = req.userData.userKey;
 
-  if (integrationKey == "Error") {
+  if (userKey == "Error") {
     return res.status(500).json({
       error: "Error finding user, please contact support",
     });
@@ -88,7 +88,7 @@ const fetchReportHistory = async (req, res, next) => {
   try {
     data = await ReportHistory.find(
       {
-        integrationKey: integrationKey,
+        userKey: userKey,
         reportKey: reportKey,
       },
       { _id: 0 } //remove ID's

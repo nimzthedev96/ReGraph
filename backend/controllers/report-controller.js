@@ -5,11 +5,11 @@ const createNewReport = async (req, res, next) => {
   /* Create single data point API */
   const { reportKey, reportDesc, reportType, filters, category } = req.body;
 
-  let integrationKey = req.userData.integrationKey;
+  let userKey = req.userData.userKey;
 
   /* If all is well, then go ahead and create */
   let newReport = new Report({
-    integrationKey,
+    userKey,
     reportKey,
     reportDescription: reportDesc,
     createdDate: new Date().toDateString(),
@@ -35,12 +35,12 @@ const createNewReport = async (req, res, next) => {
 const fetchReports = async (req, res, next) => {
   /* Fetch all available reports for this user */
 
-  let integrationKey = req.userData.integrationKey;
+  let userKey = req.userData.userKey;
 
   let data;
 
   try {
-    data = await Report.find({ integrationKey: integrationKey });
+    data = await Report.find({ userKey: userKey });
   } catch (err) {
     const error = new HttpError("Cant find any reports", 500);
     return next(error);

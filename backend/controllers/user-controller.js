@@ -13,8 +13,12 @@ const nodemailer = require("nodemailer");
 */
 
 const registerUser = async (req, res, next) => {
-  const { firstName, lastName, cellNumber, email, password, acceptedTandC } =
-    req.body;
+  const { firstName, lastName, email, password } = req.body;
+
+  console.log(firstName);
+  console.log(lastName);
+  console.log(email);
+  console.log(password);
 
   let existingUser;
 
@@ -42,17 +46,15 @@ const registerUser = async (req, res, next) => {
       .json({ error: "Error creating user, please contact support" });
   }
 
-  let integrationKey = uuidv4();
+  let userKey = uuidv4();
 
   const newUser = new User({
     firstName: firstName.replace(/\\|\//g, ""),
     lastName: lastName.replace(/\\|\//g, ""),
-    cellNumber: cellNumber.replace(/\\|\//g, ""),
     email: email.replace(/\s+/g, ""),
-    integrationKey: integrationKey,
+    userKey: userKey,
     password: hashedPassword,
-    acceptedTandC,
-    userStatus: "Pending Validation", //Default initial status - we need to verify email address first
+    acceptedTandC: true,
   });
   try {
     await newUser.save();
@@ -65,7 +67,7 @@ const registerUser = async (req, res, next) => {
 
   res.status(201).json({
     userEmail: newUser.email,
-    userIntegrationKey: newUser.integrationKey,
+    userKey: newUser.userKey,
   });
 };
 
@@ -97,22 +99,13 @@ const loginUser = async (req, res, next) => {
     return res.status(500).json({ message: "invalid user credentials" });
   }
 
-  try {
-    await existingUser.save();
-  } catch (err) {
-    console.log(err);
-    return res.status(422).json({ message: "could not update last on date" });
-  }
-
-  /* TO-DO: Validate user status */
-
   // Generate JWT token
   let token;
   try {
     token = jwt.sign(
       {
         email: existingUser.email,
-        integrationKey: existingUser.integrationKey,
+        userKey: existingUser.userKey,
       },
       "supersecretkey_themostsecretever",
       { expiresIn: "24h" }
@@ -126,7 +119,6 @@ const loginUser = async (req, res, next) => {
 
   res.json({
     token: token,
-    userStatus: existingUser.userStatus,
     message: "Success",
   });
 };
@@ -161,4 +153,3 @@ const updateEmail = async (req, res, next) => {
 module.exports.registerUser = registerUser;
 module.exports.loginUser = loginUser;
 module.exports.updateEmail = updateEmail;
-//module.exports.validateUserEmail = validateUserEmail;

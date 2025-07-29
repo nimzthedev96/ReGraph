@@ -2,7 +2,6 @@ const HttpError = require("../models/httpError");
 const Report = require("../models/report");
 
 const createNewReport = async (req, res, next) => {
-  /* Create single data point API */
   const { reportKey, reportDesc, reportType, filters, category } = req.body;
 
   let userKey = req.userData.userKey;

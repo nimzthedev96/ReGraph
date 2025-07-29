@@ -4,8 +4,7 @@ const HttpError = require("../models/httpError");
 
 module.exports = async (req, res, next) => {
   const token = req.headers["authorization"]; //Split out the token from 'Bearer [token]' in auth
-  console.log(req.headers);
-  console.log(token);
+
   try {
     if (!token) {
       const error = new HttpError("Authentication failed!", 401);

@@ -2,23 +2,9 @@ const { v4: uuidv4 } = require("uuid");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
-
-/* 
-  TO-DO: 
-  - Validate/Verify Email 
-  - Forgot password functionality
-  - Implement JWT
-  - Validate user status on login 
-*/
 
 const registerUser = async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
-
-  console.log(firstName);
-  console.log(lastName);
-  console.log(email);
-  console.log(password);
 
   let existingUser;
 

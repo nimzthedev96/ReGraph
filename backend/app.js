@@ -10,7 +10,7 @@ const app = express();
 //middleware
 app.use(express.json());
 app.use(cors());
-//app.use(bodyParser.json({ limit: "50mb" }));
+
 app.use((req, res, next) => {
   // Apply auth middleware only on certain paths
   if (req.path.startsWith("/data") || req.path.startsWith("/report")) {

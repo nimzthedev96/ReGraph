@@ -5,40 +5,12 @@ const csvToJsonReader = require("csvtojson");
 
 const readDataPointsFromFile = async (req, res, next) => {
   /* Create single data point API */
-  //const { filename, category } = req.body;
-  const filename = "D:/user_files/test1.csv";
-  const category = "test";
-  let userKey = "3c32d290-34d7-4df2-9e95-ee9c8ccdfaae"; //req.userData.userKey;
-
-  /*if (userKey == "Error") {
-    return res.status(500).json({
-      error: "Error with credentials, please contact support",
-    });
-  }*/
+  const { filename, category } = req.body;
+  //const filename = "D:/user_files/test1.csv";
+  //const category = "test";
+  let userKey = req.userData.userKey;
 
   const dataFromCsv = await csvToJsonReader().fromFile(filename);
-  let dataPointsToSave = [];
-  console.log(dataFromCsv);
-
-  /* Lets now transfrom our array into an array of documents that we can
-     bulk insert into mongo */
-
-  /*dataFromCsv.forEach((element, index) => {
-    let dp = {
-      userKey: userKey,
-      category: category,
-      data: element,
-      createdDate: new Date().toDateString(),
-      source: "test",
-    };
-    dataPointsToSave.push(dp);
-  });*/
-
-  console.log(dataPointsToSave);
-
-  /*DataPoint.insertMany(dataPointsToSave, { ordered: false }).then((res) => {
-    console.log("Number of records inserted: " + res.insertedCount);
-  });*/
 
   /* If all is well, then go ahead and create */
   try {
@@ -69,12 +41,10 @@ const getDataPointFields = async (req, res, next) => {
   /* The idea of this function is to get the different fields / properties
      we have available to report on for this userKey and category 
      Making life easier for the front end - hopefully :) */
-  console.log(req);
-  console.log(req.body);
-  const { category } = "test"; //req.body;
+  const { category } = req.body;
   /* First do some validations */
-  /* let userKey = req.userData.userKey;*/
-  let userKey = "3c32d290-34d7-4df2-9e95-ee9c8ccdfaae";
+  let userKey = req.userData.userKey;
+  //let userKey = "3c32d290-34d7-4df2-9e95-ee9c8ccdfaae";
 
   if (userKey == "Error") {
     return res.status(500).json({
@@ -125,16 +95,8 @@ const fetchAllDataPoints = async (req, res, next) => {
 
 const fetchDataPointsByCategory = async (req, res, next) => {
   /* Fetch data for this specific user account and category */
-  //const { category } = req.body;
-  let category = "test";
-  let userKey = "3c32d290-34d7-4df2-9e95-ee9c8ccdfaae";
-  //req.userData.userKey;
-
-  if (userKey == "Error") {
-    return res.status(500).json({
-      error: "Error finding user, please contact support",
-    });
-  }
+  const { category } = req.body;
+  let userKey = req.userData.userKey;
 
   let data;
 

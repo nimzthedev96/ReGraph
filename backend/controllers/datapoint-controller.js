@@ -67,7 +67,7 @@ const getDataPointFields = async (req, res, next) => {
 
 const fetchAllDataPoints = async (req, res, next) => {
   /* Fetch ALL data for this specific user account */
-
+  console.log("INSIDE fetchAllDataPoints");
   let userKey = req.userData.userKey;
 
   if (userKey == "Error") {
@@ -97,6 +97,9 @@ const fetchDataPointsByCategory = async (req, res, next) => {
   /* Fetch data for this specific user account and category */
   const { category } = req.body;
   let userKey = req.userData.userKey;
+  console.log("INSIDE fetchDataPointsByCategory");
+  console.log(category);
+  console.log(userKey);
 
   let data;
 

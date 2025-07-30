@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Form, Col, Container, Row } from "react-bootstrap";
+import "./RunReport.css";
 import BasicButton from "../../components/BasicButton";
 import { useAuth } from "../../context/AuthContext";
 import {
@@ -7,31 +8,39 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend,
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { Bar, Pie } from "react-chartjs-2";
+import { usePDF } from "react-to-pdf";
+import { useAlert } from "../../context/AlertContext";
 
 const RunReport = (params) => {
   const [reportData, setReportData] = useState(null);
+  const [dataFetched, setDataFetched] = useState(false);
   const [reportOptions, setReportOptions] = useState({});
   const [labelField, setLabelField] = useState("Expense");
   const [valueField, setValueField] = useState("Amount");
   const [color, setColor] = useState("#563d7c");
-  const [typeOfReport, setTypeOfReport] = useState("Pie");
+  const [typeOfReport, setTypeOfReport] = useState("Select");
   const [reportName, setReportName] = useState("");
+  const [category, setCategory] = useState("Default");
   const { token } = useAuth();
+  const { showAlert } = useAlert();
+  const { toPDF, targetRef } = usePDF({ filename: "ReGraph - New Report.pdf" });
 
-  const { page, setPage, reportContext, setReportContext } = params;
   ChartJS.register(
     CategoryScale,
     LinearScale,
     BarElement,
+    ArcElement,
     Title,
     Tooltip,
     Legend
   );
+
   const options = {
     responsive: true,
     plugins: {
@@ -43,6 +52,16 @@ const RunReport = (params) => {
 
   const runReportNow = async () => {
     console.log("runReportNow called");
+    if (typeOfReport != "Pie" && typeOfReport != "Bar") {
+      showAlert("Please select a type of report!", "danger");
+      return;
+    }
+
+    if (category == null || category == "") {
+      showAlert("Please enter a category", "danger");
+      return;
+    }
+
     fetchGraphData();
   };
 
@@ -64,7 +83,7 @@ const RunReport = (params) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          category: "test",
+          category: category,
         }),
       }
     );
@@ -72,8 +91,6 @@ const RunReport = (params) => {
     await response.json();
 
     console.log(response);
-
-    //fetchDataPointsByCategory
 
     const resp = await fetch(
       "http://localhost:3002/data/fetchDataPointsByCategory",
@@ -84,7 +101,7 @@ const RunReport = (params) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          category: "test",
+          category: category,
         }),
       }
     );
@@ -94,8 +111,16 @@ const RunReport = (params) => {
     let datapoints = dataResp.dataPoints;
     console.log(datapoints);
 
-    /* Now we got to work some magic to get our various datasets */
+    if (!Array.isArray(datapoints) || !datapoints.length) {
+      showAlert(
+        "No data found for category! Please upload file with this category, or enter in a different category.",
+        "danger"
+      );
+      setDataFetched(false);
+      return;
+    }
 
+    /* Now we got to work some magic to get our various datasets */
     let labels = [];
     let datasets = [];
     datapoints.forEach((element) => {
@@ -118,15 +143,15 @@ const RunReport = (params) => {
     ds.push(ds1);
 
     reportConfiguration["datasets"] = ds;
-
+    setDataFetched(true);
     setReportData(reportConfiguration);
 
     console.log(reportData);
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
     fetchGraphData();
-  }, []);
+  }, []);*/
 
   return (
     <div className="wrapper">
@@ -144,6 +169,7 @@ const RunReport = (params) => {
                   console.log(e.target.value);
                 }}
               >
+                <option value="Select">Please select the type of report</option>
                 <option value="Pie">Pie Chart</option>
                 <option value="Bar">Bar Graph</option>
               </Form.Select>
@@ -153,7 +179,14 @@ const RunReport = (params) => {
                 id="color"
                 defaultValue={color}
                 title="Choose your color"
-                onChange={(e) => setColor(e.value)}
+                onChange={(e) => setColor(e.target.value)}
+              />
+              <Form.Label htmlFor="category">Category</Form.Label>
+              <Form.Control
+                id="category"
+                defaultValue={category}
+                title="Category"
+                onChange={(e) => setCategory(e.target.value)}
               />
               <BasicButton
                 btnClass="btnPrimary"
@@ -166,7 +199,12 @@ const RunReport = (params) => {
           <Col>
             <Form>
               <Form.Label htmlFor="reportName">Report name</Form.Label>
-              <Form.Control id="reportName" title="ReportName" />
+              <Form.Control
+                id="reportName"
+                title="ReportName"
+                defaultValue={reportName}
+                onChange={(e) => setReportName(e.target.value)}
+              />
               <BasicButton
                 btnClass="btnPrimary"
                 btnLabel="Save this report"
@@ -175,13 +213,23 @@ const RunReport = (params) => {
               <BasicButton
                 btnClass="btnPrimary"
                 btnLabel="Download as PDF"
-                btnOnClick={downloadReportAsPDF}
+                btnOnClick={() => toPDF()}
               />
             </Form>
           </Col>
         </Row>
-        <Row>{typeOfReport == "Bar" ? <Bar data={reportData} /> : null};</Row>
-        {};
+        <Row>
+          <div ref={targetRef} id="chartCanvas" class="mx-auto">
+            {datafetched ? (
+              typeOfReport == "Bar" ? (
+                <Bar data={reportData} />
+              ) : typeOfReport == "Pie" ? (
+                <Pie data={reportData} />
+              ) : null
+            ) : null}
+            ;
+          </div>
+        </Row>
       </Container>
     </div>
   );

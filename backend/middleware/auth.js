@@ -22,7 +22,11 @@ module.exports = async (req, res, next) => {
     next();
   } catch (err) {
     console.log(err);
-    const error = new HttpError("Invalid Authentication", 401);
-    return next(error);
+
+    res.status(401).json({
+      message: "Invalid Authentication",
+      code: 401,
+    });
+    return next(res);
   }
 };

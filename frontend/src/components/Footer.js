@@ -8,7 +8,7 @@ function Footer() {
         padding: "10px",
         height: "10px",
         bottom: 20,
-        position: "absolute",
+        position: "fixed",
         textAlign: "right",
       }}
     >

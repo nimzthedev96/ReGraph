@@ -21,10 +21,7 @@ function ReportHistory(params) {
     );
 
     let dataResp = await resp.json();
-    console.log(dataResp);
-
     setReportHistory(dataResp.reports);
-    console.log(reportHistory);
   };
 
   const runReport = async (reportKey) => {

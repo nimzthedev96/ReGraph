@@ -2,7 +2,7 @@
   text-align: center;
   font-family: cursive;
   background-color: #8a6c9f;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
 }
 

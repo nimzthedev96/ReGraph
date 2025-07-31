@@ -25,7 +25,7 @@ function ReportHistory(params) {
   };
 
   const runReport = async (reportKey) => {
-    setReportContext(reportKey);
+    setReportContext({ reportKey: reportKey });
     setPage("report");
   };
 
@@ -53,7 +53,7 @@ function ReportHistory(params) {
                 <tr>
                   <td>{item.reportKey}</td>
                   <td>{item.reportDescription}</td>
-                  <td>{item.category}</td>
+                  <td>{item.dataCategory}</td>
                   <td>{item.createdDate}</td>
                   <td>
                     <BasicButton

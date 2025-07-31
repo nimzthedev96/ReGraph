@@ -29,11 +29,11 @@ function Home(params) {
         </Row>
 
         <Row>
-          <Col xs={4}>
+          <Col lg={4} xs={12}>
             <UploadFile setPage={setPage} />
           </Col>
-          <Col xs={2}></Col>
-          <Col xs={6}>
+          <Col lg={2} xs={0}></Col>
+          <Col lg={6} xs={12}>
             <ReportHistory
               setPage={setPage}
               setReportContext={setReportContext}

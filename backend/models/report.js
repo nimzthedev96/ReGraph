@@ -12,7 +12,7 @@ const reportSchema = new Schema({
   reportType: {
     type: String,
     required: true,
-    enum: ["PieChart", "BarGraph"],
+    enum: ["Pie", "Bar"],
   },
 });
 

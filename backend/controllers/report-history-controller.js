@@ -7,7 +7,7 @@ const addReportHistory = async (req, res, next) => {
 
   let userKey = req.userData.userKey;
 
-  if (userKey == "Error") {
+  if (userKey == "" || userKey == null) {
     return res.status(500).json({
       error: "Error finding user, please contact support",
     });
@@ -46,7 +46,7 @@ const fetchAllReportHistory = async (req, res, next) => {
   /* Fetch all available reports for this user */
   let userKey = req.userData.userKey;
 
-  if (userKey == "Error") {
+  if (userKey == "" || userKey == undefined) {
     return res.status(500).json({
       error: "Error finding user, please contact support",
     });
@@ -55,17 +55,14 @@ const fetchAllReportHistory = async (req, res, next) => {
   let data;
 
   try {
-    data = await ReportHistory.find(
-      { userKey: userKey },
-      { _id: 0 } //remove ID's
-    );
+    data = await ReportHistory.find({ userKey: userKey });
   } catch (err) {
     const error = new HttpError("Cant find any reports", 500);
     return next(error);
   }
 
   return res.json({
-    reports: data.map((reportHistory) =>
+    reportHistory: data.map((reportHistory) =>
       reportHistory.toObject({ getters: true })
     ),
   });
@@ -86,20 +83,17 @@ const fetchReportHistory = async (req, res, next) => {
   let data;
 
   try {
-    data = await ReportHistory.find(
-      {
-        userKey: userKey,
-        reportKey: reportKey,
-      },
-      { _id: 0 } //remove ID's
-    );
+    data = await ReportHistory.find({
+      userKey: userKey,
+      reportKey: reportKey,
+    });
   } catch (err) {
     const error = new HttpError("Cant find any reports", 500);
     return next(error);
   }
 
   return res.json({
-    reports: data.map((reportHistory) =>
+    reportHistory: data.map((reportHistory) =>
       reportHistory.toObject({ getters: true })
     ),
   });

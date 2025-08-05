@@ -70,7 +70,7 @@ const fetchAllDataPoints = async (req, res, next) => {
   console.log("INSIDE fetchAllDataPoints");
   let userKey = req.userData.userKey;
 
-  if (userKey == "Error") {
+  if (userKey == "" || userKey == undefined) {
     return res.status(500).json({
       error: "Error finding user, please contact support",
     });

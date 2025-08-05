@@ -27,6 +27,7 @@ const registerUser = async (req, res, next) => {
   try {
     hashedPassword = await bcrypt.hash(password, 12);
   } catch (err) {
+    console.log(err);
     return res
       .status(500)
       .json({ error: "Error creating user, please contact support" });
@@ -43,7 +44,7 @@ const registerUser = async (req, res, next) => {
     acceptedTandC: true,
   });
   try {
-    await newUser.save();
+    let createdUser = await newUser.save();
   } catch (err) {
     console.log(err);
     return res

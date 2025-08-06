@@ -20,18 +20,18 @@ This repository contains both the frontend and backend applications, in seperate
 ### Running the application locally
 
 1. Download this repository
-2. Configure environment variables in backend/config.env
-   `DB_CONNECTION_STRING="Insert your Mongo Atlas DB connection string here"`
-   `UPLOADS_FILE_PATH=Directory/to/save/uploaded/files`
-3. Navigate to the backend directory and start the backend application by running
-   `npm run start`
+2. Configure environment variables in backend/config.env\
+   `DB_CONNECTION_STRING="Insert your Mongo Atlas DB connection string here"`\
+   `UPLOADS_FILE_PATH=directory/to/save/uploaded/files`
+3. Navigate to the backend directory and start the backend application by running\
+   `npm run start`\
    _Note that the backend application needs to be started before the frontend application_
-4. Then navigate to the frontend directory and start the front end application by running
-   `npm run start`
+4. Then navigate to the frontend directory and start the front end application by running\
+   `npm run start`\
    Your browser should open the application on localhost.
 
 <br/>
 
 ## Running tests
-Only the backend portion of the application has unit tests. Therefore, navigate to the backend directory and run
+Only the backend portion of the application has unit tests. Therefore, navigate to the backend directory and run\
 `npm run test`

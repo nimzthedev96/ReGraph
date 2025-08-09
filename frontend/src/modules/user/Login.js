@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Col } from "react-bootstrap";
 import "./Login.css";
 import { useAuth } from "../../context/AuthContext";
 import { useAlert } from "../../context/AlertContext";
@@ -47,7 +47,8 @@ function Login(params) {
   return (
     <div>
       <div className="wrapper">
-        <div className="login-form-container">
+        <Col xs={0} sm={3} md={3}></Col>
+        <Col className="login-form-container" xs={12} sm={6} md={6}>
           <h2 className="login-title">Login</h2>
           <Form className="login-form">
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -88,7 +89,8 @@ function Login(params) {
               btnOnClick={() => setPopUp("")}
             />
           </Form>
-        </div>
+        </Col>
+        <Col xs={0} sm={3} md={3}></Col>
       </div>
     </div>
   );

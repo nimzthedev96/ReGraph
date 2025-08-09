@@ -55,6 +55,7 @@ const registerUser = async (req, res, next) => {
   res.status(201).json({
     userEmail: newUser.email,
     userKey: newUser.userKey,
+    message: "Success",
   });
 };
 

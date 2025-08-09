@@ -65,6 +65,7 @@ function Register(params) {
         const data = await response.json();
 
         if (data.message && data.message == "Success") {
+          console.log("register success");
           showAlert(
             "User successfully registered! Please enter your login credentials",
             "success"
@@ -72,6 +73,8 @@ function Register(params) {
           setPage("landing");
           setPopUp("login");
         } else {
+          showAlert("User registration failed: " + data.error, "danger");
+          console.log(data);
         }
       } catch (e) {
         showAlert("User registration failed: " + e, "danger");

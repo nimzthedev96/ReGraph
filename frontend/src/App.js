@@ -18,6 +18,7 @@ function App() {
   const [reportContext, setReportContext] = useState("");
   const [heading, setHeading] = useState(null);
   const [text, setText] = useState(null);
+  console.log(process.env.REACT_APP_BACKEND_URL);
 
   return (
     <AlertProvider>

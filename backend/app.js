@@ -1,9 +1,13 @@
 const express = require("express");
-const PORT = process.env.PORT || 3002;
+const port = process.env.PORT || 3002;
 const mongoose = require("mongoose");
 const multer = require("multer");
 const cors = require("cors");
 const auth = require("./middleware/auth");
+
+require("dotenv").config(); //For our environment variables
+
+console.log("Starting backend server...");
 
 const app = express();
 
@@ -20,10 +24,10 @@ app.use((req, res, next) => {
   }
 });
 
-//TO DO: make directory configurable
+console.log("Files will be uploaded to: " + process.env.UPLOADS_FILE_PATH);
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "/user_files/");
+    cb(null, process.env.UPLOADS_FILE_PATH);
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
@@ -40,9 +44,10 @@ const userRoutes = require("./routes/user-routes");
 //Connext to DB
 main().catch((err) => console.log(err));
 async function main() {
-  await mongoose.connect(
-    "mongodb+srv://naominemeti96:2qWJr1y6sEbqk7fM@cluster0.e9u6rag.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-  );
+  console.log("Connecting to DB...");
+  await mongoose.connect(process.env.DB_CONNECTION_STRING);
+  console.log("DB connection successful!");
+  console.log("Server is ready to accept requests");
 }
 
 app.use("/user", userRoutes);
@@ -64,6 +69,6 @@ app.use((req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log("listening on " + PORT);
+app.listen(port, () => {
+  console.log("Backend server started. Listening on port " + port);
 });

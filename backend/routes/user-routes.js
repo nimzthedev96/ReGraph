@@ -1,3 +1,5 @@
+/* User module */
+
 const userController = require("../controllers/user-controller");
 const { check } = require("express-validator");
 const express = require("express");

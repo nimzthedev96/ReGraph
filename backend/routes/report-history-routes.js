@@ -1,3 +1,5 @@
+/* Report module - Report history */
+
 const reportHistoryController = require("../controllers/report-history-controller");
 const { check } = require("express-validator");
 

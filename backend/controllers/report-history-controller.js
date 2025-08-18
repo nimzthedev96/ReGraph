@@ -1,7 +1,10 @@
+/* Report module - report history */
+
 const HttpError = require("../models/httpError");
 const ReportHistory = require("../models/reportHistory");
 const Report = require("../models/report");
 
+/*addReportHistory: Add a new report history record for an existing report */
 const addReportHistory = async (req, res, next) => {
   const { reportKey } = req.body;
 
@@ -42,6 +45,7 @@ const addReportHistory = async (req, res, next) => {
   });
 };
 
+/*fetchAllReportHistory: Fetch all the report history for a user  */
 const fetchAllReportHistory = async (req, res, next) => {
   /* Fetch all available reports for this user */
   let userKey = req.userData.userKey;
@@ -68,6 +72,8 @@ const fetchAllReportHistory = async (req, res, next) => {
   });
 };
 
+/*fetchReportHistory: Fetch all the report history for a user and specific
+  report */
 const fetchReportHistory = async (req, res, next) => {
   /* Fetch all available reports for this user */
   const { reportKey } = req.body;

@@ -1,3 +1,5 @@
+/* Report module - Reports */
+
 const reportController = require("../controllers/report-controller");
 const { check } = require("express-validator");
 

@@ -1,6 +1,9 @@
+/* Report module */
+
 const HttpError = require("../models/httpError");
 const Report = require("../models/report");
 
+/* createNewReport: This API saves a new report to the database */
 const createNewReport = async (req, res, next) => {
   const { reportKey, reportDesc, reportType, filters, category } = req.body;
 
@@ -31,11 +34,9 @@ const createNewReport = async (req, res, next) => {
   });
 };
 
+/*fetchReports: This API fetches all existing reports for a user */
 const fetchReports = async (req, res, next) => {
-  /* Fetch all available reports for this user */
-
   let userKey = req.userData.userKey;
-
   let data;
 
   try {

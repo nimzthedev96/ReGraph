@@ -1,8 +1,11 @@
+/* User module */
+
 const { v4: uuidv4 } = require("uuid");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+/*registerUser: Register a new user on the system  */
 const registerUser = async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
 
@@ -41,7 +44,6 @@ const registerUser = async (req, res, next) => {
     email: email.replace(/\s+/g, ""),
     userKey: userKey,
     password: hashedPassword,
-    acceptedTandC: true,
   });
   try {
     let createdUser = await newUser.save();
@@ -59,6 +61,8 @@ const registerUser = async (req, res, next) => {
   });
 };
 
+/*loginUser: Logs a user into the system. Validates user credentials and 
+  returns a JWT token */
 const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -95,6 +99,7 @@ const loginUser = async (req, res, next) => {
         email: existingUser.email,
         userKey: existingUser.userKey,
       },
+      //This would normally be stored securely, secrets should not be hardcoded
       "supersecretkey_themostsecretever",
       { expiresIn: "24h" }
     );
@@ -111,33 +116,5 @@ const loginUser = async (req, res, next) => {
   });
 };
 
-const updateEmail = async (req, res, next) => {
-  const { userId, email } = req.body;
-
-  let existingEmail;
-
-  try {
-    existingEmail = await User.findById({ _id: userId });
-  } catch (err) {
-    return res.status(500).json({ message: "unable to find user" });
-  }
-
-  existingEmail.email = email;
-  existingEmail.dateCreated = new Date().toDateString();
-  try {
-    await existingEmail.save();
-  } catch (err) {
-    console.log("error", err);
-
-    return res.status(500).json({ message: "unable to find user and save" });
-  }
-
-  return res.status(200).json({
-    data: existingEmail.toObject({ getters: true }),
-    message: "Your email has been updated",
-  });
-};
-
 module.exports.registerUser = registerUser;
 module.exports.loginUser = loginUser;
-module.exports.updateEmail = updateEmail;

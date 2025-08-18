@@ -1,3 +1,6 @@
+/* Authentication middleware handles verifying the JWT token passed in with the request.
+   Here we verify it and decode it */
+
 const jwt = require("jsonwebtoken");
 
 const HttpError = require("../models/httpError");

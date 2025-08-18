@@ -1,13 +1,16 @@
+/* Datapoints module */
+
 const HttpError = require("../models/httpError");
 const DataPoint = require("../models/dataPoint");
 
 const csvToJsonReader = require("csvtojson");
 
+/* readDataPointsFromFile: This API is used to read data from a CSV file
+   and create individual data points in our database. 
+   We read the file row by row, and use the file's heading to form a 
+   JSON object which is stored as the datapoint */
 const readDataPointsFromFile = async (req, res, next) => {
-  /* Create single data point API */
   const { filename, category } = req.body;
-  //const filename = "D:/user_files/test1.csv";
-  //const category = "test";
   let userKey = req.userData.userKey;
 
   const dataFromCsv = await csvToJsonReader().fromFile(filename);
@@ -20,7 +23,6 @@ const readDataPointsFromFile = async (req, res, next) => {
         category,
         data: element,
         createdDate: new Date().toDateString(),
-        source: "test",
       });
 
       await newDp.save();
@@ -37,6 +39,8 @@ const readDataPointsFromFile = async (req, res, next) => {
   });
 };
 
+/* getDataPointFields: This API is used to fetch the 'headings' of the
+   datapoints. In order the words, the fields */
 const getDataPointFields = async (req, res, next) => {
   /* The idea of this function is to get the different fields / properties
      we have available to report on for this userKey and category 
@@ -65,9 +69,9 @@ const getDataPointFields = async (req, res, next) => {
   });
 };
 
+/* fetchAllDataPoints: This API fetches ALL datapoints for a specific user,
+   regardless of category */
 const fetchAllDataPoints = async (req, res, next) => {
-  /* Fetch ALL data for this specific user account */
-  console.log("INSIDE fetchAllDataPoints");
   let userKey = req.userData.userKey;
 
   if (userKey == "" || userKey == undefined) {
@@ -81,7 +85,7 @@ const fetchAllDataPoints = async (req, res, next) => {
   try {
     data = await DataPoint.find(
       { userKey: userKey },
-      { _id: 0, category: 1, data: 1, createdDate: 1, source: 1 } //only return the necessary info...
+      { _id: 0, category: 1, data: 1, createdDate: 1 } //only return the necessary info...
     );
   } catch (err) {
     const error = new HttpError("Cant find data", 500);
@@ -93,13 +97,12 @@ const fetchAllDataPoints = async (req, res, next) => {
   });
 };
 
+/* fetchDataPointsByCategory: This API fetches ALL datapoints for a specific user,
+   and for a specific category. This is the main API called to fetch the datapoints
+   for to run and render a report on the front end */
 const fetchDataPointsByCategory = async (req, res, next) => {
-  /* Fetch data for this specific user account and category */
   const { category } = req.body;
   let userKey = req.userData.userKey;
-  console.log("INSIDE fetchDataPointsByCategory");
-  console.log(category);
-  console.log(userKey);
 
   let data;
 
@@ -109,7 +112,7 @@ const fetchDataPointsByCategory = async (req, res, next) => {
         category: category,
         userKey: userKey,
       },
-      { _id: 0, category: 1, data: 1, createdDate: 1, source: 1 } //only return the necessary info...
+      { _id: 0, category: 1, data: 1, createdDate: 1 } //only return the necessary info...
     );
   } catch (err) {
     const error = new HttpError("Cant find data", 500);
@@ -121,75 +124,7 @@ const fetchDataPointsByCategory = async (req, res, next) => {
   });
 };
 
-const fetchDataWithFilters = async (req, res, next) => {
-  /* Fetch data using filters from a report... Or on demand filters,
-     works with either or 
-     Actions can be:
-       - DATA: Fetches actual data records
-       - COUNT: Counts records (TO-DO)
-       - SUM|Field: Sums specific field (TO-DO)
-    
-    TO-DO: Figure out operators so we can search with < and >
-
-    TO-DO: Aggregations? Joins? Perhaps across different categories for the same 
-           integration keys   */
-  const { category, filters, action } = req.body;
-
-  let userKey = req.userData.userKey;
-
-  if (userKey == "Error") {
-    return res.status(500).json({
-      error: "Error finding user, please contact support",
-    });
-  }
-
-  let data;
-
-  /* ALWAYS ADD THESE GUYS */
-  Object.defineProperty(filters, "category", { value: category });
-  Object.defineProperty(filters, "userKey", { value: userKey });
-
-  switch (action) {
-    case "DATA":
-      try {
-        data = await DataPoint.find(filters, {
-          _id: 0,
-          category: 1,
-          data: 1,
-          createdDate: 1,
-          source: 1,
-        });
-      } catch (err) {
-        console.log(err);
-        const error = new HttpError("Cant find data", 500);
-        return next(error);
-      }
-
-      return res.json({
-        dataPoints: data.map((dp) => dp.toObject({ getters: true })),
-      });
-
-    case "COUNT":
-      /* TO-DO */
-
-      return res.status(500).json({
-        error: "Not yet implemented!",
-      });
-    case "SUM":
-      /* TO-DO */
-
-      return res.status(500).json({
-        error: "Not yet implemented!",
-      });
-    default:
-      return res.status(500).json({
-        error: "Please specify an action: DATA|COUNT|SUM",
-      });
-  }
-};
-
 module.exports.getDataPointFields = getDataPointFields;
 module.exports.readDataPointsFromFile = readDataPointsFromFile;
 module.exports.fetchAllDataPoints = fetchAllDataPoints;
 module.exports.fetchDataPointsByCategory = fetchDataPointsByCategory;
-module.exports.fetchDataWithFilters = fetchDataWithFilters;

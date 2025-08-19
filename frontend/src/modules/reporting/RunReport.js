@@ -66,7 +66,7 @@ const RunReport = (params) => {
 
   const saveReport = async () => {
     const response = await fetch(
-      "http://localhost:3002/reporting/createNewReport",
+      process.env.REACT_APP_BACKEND_URL + "/reporting/createNewReport",
       {
         method: "POST",
         headers: {
@@ -91,7 +91,7 @@ const RunReport = (params) => {
 
   const fetchGraphData = async () => {
     const response = await fetch(
-      "http://localhost:3002/data/getDataPointFields",
+      process.env.REACT_APP_BACKEND_URL + "/data/getDataPointFields",
       {
         method: "POST",
         headers: {
@@ -109,7 +109,7 @@ const RunReport = (params) => {
     console.log(response);
 
     const resp = await fetch(
-      "http://localhost:3002/data/fetchDataPointsByCategory",
+      process.env.REACT_APP_BACKEND_URL + "/data/fetchDataPointsByCategory",
       {
         method: "POST",
         headers: {

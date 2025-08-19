@@ -10,7 +10,7 @@ function ReportHistory(params) {
 
   const fetchReportHistory = async () => {
     const resp = await fetch(
-      "http://localhost:3002/reporting/fetchAllReports",
+      process.env.REACT_APP_BACKEND_URL + "/reporting/fetchAllReports",
       {
         method: "GET",
         headers: {

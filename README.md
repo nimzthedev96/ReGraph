@@ -11,6 +11,25 @@ This repository contains both the frontend and backend applications, in seperate
 - `MongoDB`
 - And a number of `npm` packages (all available in this repository)
 
+### Project structure
+
+#### backend
+
+- `app.js`: This is where the backend application runs
+- `/models`: MongoDB models are defined here for each entity we store
+- `/middleware`: Contains our custom middleware - currently only authentication
+- `/routes`: Contains routes per module
+- `/controllers`: Contains the main business logic for each module
+- `/test`: Contains all unit tests for the application
+
+#### frontend
+
+- `/src/App.js`: The single page application component that controls what the user sees on screen based on state
+- `/src/components`: Contains custom reusable react components
+- `/src/context`: Contains context providers to manage global state for authentication and alerts
+- `/src/modules`: Contains each modules components
+- `/public`: Static assets that are served from the app
+
 <br/>
 
 ## Installing and running the application locally
@@ -23,17 +42,21 @@ This repository contains both the frontend and backend applications, in seperate
 ### Running the application locally
 
 1. Download this repository
-2. Configure environment variables in backend/.env.backend\
+2. Configure environment variables in for the backend application in backend/.env\
    `DB_CONNECTION_STRING="Insert your Mongo Atlas DB connection string here"`\
    `UPLOADS_FILE_PATH=directory/to/save/uploaded/files`
+   `PORT=3002`
 3. Open your terminal and navigate to the `backend` directory and install all depencies by running\
    `npm install`
 4. While still in `backend` directory, start the back-end application by running\
    `npm run start`\
    _Note that the backend application needs to be started before the frontend application_
-5. Then navigate to the `frontend` directory and install all depencies by running\
+5. Configure environment variables in for the frontend application in frontend/.env\
+   _This is only required if you changed PORT environment variable in backend/.env_
+   `REACT_APP_BACKEND_URL="http://localhost:3002"`\
+6. Then navigate to the `frontend` directory and install all depencies by running\
    `npm install`
-6. While still in `frontend` directory, and start the front-end application by running\
+7. While still in `frontend` directory, and start the front-end application by running\
    `npm run start`\
    Your browser should open the application on localhost.
 

@@ -1,24 +1,35 @@
+/* 
+  Authentication context
+  
+  Context provider for managing global authentication state across the app.
+  Also manages the JWT token returned from the backend API that is then used
+  in all other API calls.
+*/
+
 import { createContext, useState, useContext } from "react";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem("jwt_token"));
-  const [isAuthenticated, setIsAuthenticated] = useState(!!token);
+  const [token, setToken] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const login = async (email, password) => {
     try {
-      const response = await fetch("http://localhost:3002/user/loginUser", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
+      const response = await fetch(
+        process.env.REACT_APP_BACKEND_URL + "/user/loginUser",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -29,14 +40,11 @@ export const AuthProvider = ({ children }) => {
         return true;
       }
 
-      console.log(data.message);
       localStorage.removeItem("jwt_token");
       setToken(null);
       setIsAuthenticated(false);
       return false;
     } catch (e) {
-      //do something with the error...
-      console.log(e);
       localStorage.removeItem("jwt_token");
       setToken(null);
       setIsAuthenticated(false);

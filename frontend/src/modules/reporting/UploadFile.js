@@ -22,13 +22,16 @@ const UploadFile = (params) => {
       const formData = new FormData();
       formData.append("file", selectedFile);
       try {
-        const fileResponse = await fetch("http://localhost:3002/uploadFile", {
-          method: "POST",
-          headers: {
-            authorization: token, // Include the token in the header
-          },
-          body: formData,
-        });
+        const fileResponse = await fetch(
+          process.env.REACT_APP_BACKEND_URL + "/uploadFile",
+          {
+            method: "POST",
+            headers: {
+              authorization: token, // Include the token in the header
+            },
+            body: formData,
+          }
+        );
 
         await fileResponse.json();
 
@@ -38,7 +41,7 @@ const UploadFile = (params) => {
           if (category == null) setCategory("Default");
 
           const response = await fetch(
-            "http://localhost:3002/data/readDataPointsFromFile",
+            process.env.REACT_APP_BACKEND_URL + "/data/readDataPointsFromFile",
             {
               method: "POST",
               headers: {

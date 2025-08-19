@@ -1,3 +1,10 @@
+/* 
+  Basic button component
+  
+  This component is a basic button that we use all over the app. It is a 
+  wrapper of react bootstraps button.
+*/
+
 import { Button } from "react-bootstrap";
 
 function BasicButton(props) {

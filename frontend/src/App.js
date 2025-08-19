@@ -1,3 +1,10 @@
+/* App.js
+   
+   Controls the entire single page application. 
+   Renders our menu and footers, as well as determines which other
+   components should be showing given the current state.
+*/
+
 import { useState } from "react";
 import "./App.css";
 import Login from "./modules/user/Login";

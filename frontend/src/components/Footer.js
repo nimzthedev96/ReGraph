@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+/* 
+  Footer component
+  
+  This component contains the footer seen on every page at the bottom.
+*/
 
 function Footer() {
   return (

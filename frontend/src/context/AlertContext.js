@@ -1,3 +1,12 @@
+/* 
+  Alert context
+  
+  Context provider for managing global state of alerts across the app. Allows us
+  to have a single alert component for managing all error and success messages.
+
+  Used in conjuction with components/ErrorAlert.js
+*/
+
 import { createContext, useState, useContext } from "react";
 
 const AlertContext = createContext();

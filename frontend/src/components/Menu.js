@@ -1,3 +1,11 @@
+/* 
+  Menu component
+  
+  This component contains the navigation bar on the top of every page. 
+  Using a combination of the logged in state, and page state, we determine
+  what menu options to show.
+*/
+
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { useAuth } from "../context/AuthContext";
 import BasicButton from "./BasicButton";
@@ -29,14 +37,6 @@ const Menu = (props) => {
                     btnLabel="Home"
                     btnOnClick={() => setPage("home")}
                   />
-
-                  <BasicButton
-                    btnClass="btnPrimaryMenu"
-                    btnLabel="Profile"
-                    btnOnClick={() => console.log("Profile")}
-                    btnStyle={{ position: "absolute", right: 100 }}
-                  />
-
                   <BasicButton
                     btnClass="btnPrimaryMenu"
                     btnLabel="Logout"

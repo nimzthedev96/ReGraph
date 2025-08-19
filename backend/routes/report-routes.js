@@ -1,7 +1,6 @@
 /* Report module - Reports */
 
 const reportController = require("../controllers/report-controller");
-const { check } = require("express-validator");
 
 const express = require("express");
 const authCheck = require("../middleware/auth");

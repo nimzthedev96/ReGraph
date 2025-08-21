@@ -47,8 +47,7 @@ function Login(params) {
   return (
     <div>
       <div className="wrapper">
-        <Col xs={0} sm={3} md={3}></Col>
-        <Col className="login-form-container" xs={12} sm={6} md={6}>
+        <Col className="login-form-container">
           <h2 className="login-title">Login</h2>
           <Form className="login-form">
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -90,7 +89,6 @@ function Login(params) {
             />
           </Form>
         </Col>
-        <Col xs={0} sm={3} md={3}></Col>
       </div>
     </div>
   );

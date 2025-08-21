@@ -84,6 +84,6 @@ describe("Report history", () => {
     await ReportHistoryController.fetchAllReportHistory(req, res);
 
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res._getData()).reports).toHaveLength(2);
+    expect(JSON.parse(res._getData()).reportHistory).toHaveLength(2);
   });
 });

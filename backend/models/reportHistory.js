@@ -8,4 +8,4 @@ const reportHistorySchema = new Schema({
   reportRunDate: { type: Date, required: true },
 });
 
-module.exports = mongoose.model("ReportHistorySchema", reportHistorySchema);
+module.exports = mongoose.model("ReportHistory", reportHistorySchema);

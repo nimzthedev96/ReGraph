@@ -1,13 +1,34 @@
 
-
-
 .login-form-container {
-  padding: 20px;
+  padding: 5px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   background-color: rgb(33, 37, 41);
-
   transition: all 300ms;
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  transition: all 300ms;
+}
+
+/* Small devices (phones, 400px and up)*/
+@media (min-width: 400px) { 
+  .login-form-container {
+    width: 80%;
+    position: absolute;
+    top: 20%;
+    left: 10%;
+  }
+}
+
+/* Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {  
+  .login-form-container {
+    width: 40%;
+    position: absolute;
+    top: 20%;
+    left: 30%;
+  }
 }
 
 .login-title {

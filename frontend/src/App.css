@@ -6,13 +6,21 @@
   width: 100vw;
 }
 
-
 .btnLoginRegister {
   background-color: #8a6c9f !important;
   border-color: #8a6c9f !important;
   color: white;
   border-radius: 10px;
   padding: 5px 15px 5px 15px;
+  margin: 5px;
+}
+
+.btnLoginRegister:hover {
+  background-color: #8a6c9f !important;
+  border-color: 8a6c9f  !important;
+  color: white;
+  border-radius: 10px;
+  padding: 8px 15px 8px 15px;
   margin: 5px;
 }
 

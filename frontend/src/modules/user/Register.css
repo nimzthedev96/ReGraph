@@ -1,13 +1,33 @@
 .register-form-container {
-  width: 30%;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 2px 2px rgba(0,0,0,0.3);
   background-color: rgb(33, 37, 41);
+  color: white;
   position: absolute;
   top: 10%;
-  left: 30%;
-  color: white;
+  width: 100%;
+  transition: all 300ms;
+}
+
+/* Small devices (phones, 400px and up)*/
+@media (min-width: 400px) { 
+  .register-form-container {
+    width: 80%;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+  }
+}
+
+/* Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {  
+  .register-form-container {
+    width: 40%;
+    position: absolute;
+    top: 10%;
+    left: 30%;
+  }
 }
 
 .register-title {

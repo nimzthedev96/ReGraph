@@ -8,24 +8,94 @@
   color: black;
 }
 
+/* Animation for alerts to make them appear smoothly*/
+@keyframes fadeIn {
+  from {
+    opacity: 0; /* Initial state: transparent */
+  }
+  to {
+    opacity: 1; /* Final state: fully visible */
+  }
+}
+
+.alert {
+  opacity: 0; /* Start completely transparent */
+  animation: fadeIn 500ms forwards; /* Apply the animation */
+}
+
+.alertContainer {
+  position: absolute;
+}
+
+/* Small devices (phones, 400px and up)*/
+@media (min-width: 400px) { 
+  .alertContainer {
+    width: 100%;
+    z-Index: 1;
+  }
+}
+
+/* Medium devices (tablets, 768px and up)*/
+@media (min-width: 555px) {  
+  .alertContainer {
+    width: 80%;
+    left: 10%;
+    z-Index: 1;
+  }
+}
+
+/* Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {  
+  .alertContainer {
+    width: 60%;
+    left: 20%;
+    z-Index: 1;
+  }
+}
+
+
 .btnPrimary {
   background-color: black;
   border-color: black;
   color: white;
   border-radius: 10px;
   padding: 5px 15px 5px 15px;
+  margin: 3px;
+  transition: background-color 0.5s, padding 0.5s, color 0.5s ;
+}
+
+.btnPrimary:hover {
+  background-color: #8a6c9f;
+  border-color: #8a6c9f;
+  color: black;
+  border-radius: 10px;
+  padding: 6px 16px 6px 16px;
+  margin: 2px;
 }
 
 .btnPrimaryMenu {
   background-color: transparent;
-  border: none;
+  border-color: #8a6c9f !important;
   color: black;
+  border-radius: 10px;
+  padding: 5px 15px 5px 15px;
+  text-align: center;
+  margin: 3px;
+  transition: font-size 0.5s;
+}
+
+.btnPrimaryMenu:hover{
+  font-size: 18px;
+  background-color: transparent !important;
+  border-color: #8a6c9f !important;
+  border-radius: 10px;
+  color: black  !important;
   padding: 5px 15px 5px 15px;
   text-align: center;
   margin: 3px;
 }
 
-.btnPrimaryMenu:hover{
+.btnPrimaryMenu:active{
   font-size: 18px;
   background-color: transparent;
   border: none;
@@ -38,4 +108,5 @@
 
 .home-container {
   padding: 10px;
+  overflow: hidden;
 }

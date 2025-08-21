@@ -29,7 +29,7 @@ const Menu = (props) => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav>
+            <Nav className="ms-auto">
               {isAuthenticated ? (
                 <div>
                   <BasicButton
@@ -45,22 +45,19 @@ const Menu = (props) => {
                       setPage("landing");
                       setPopUp("");
                     }}
-                    btnStyle={{ position: "absolute", right: 20 }}
                   />
                 </div>
               ) : (
                 <div>
                   <BasicButton
                     btnClass="btnPrimaryMenu"
-                    btnLabel="Login"
-                    btnOnClick={() => setPopUp("login")}
-                    btnStyle={{ position: "absolute", right: 20 }}
+                    btnLabel="Register"
+                    btnOnClick={() => setPopUp("register")}
                   />
                   <BasicButton
                     btnClass="btnPrimaryMenu"
-                    btnLabel="Register"
-                    btnOnClick={() => setPopUp("register")}
-                    btnStyle={{ position: "absolute", right: 100 }}
+                    btnLabel="Login"
+                    btnOnClick={() => setPopUp("login")}
                   />
                 </div>
               )}
